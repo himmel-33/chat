@@ -27,4 +27,9 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3000', // Express 서버의 API를 프록시
+    },
+  },
 });

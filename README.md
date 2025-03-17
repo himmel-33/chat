@@ -9,3 +9,23 @@ react(프런트) & express서버 socket.io 이용한 오픈채팅 만들기
 4. user 이름 받기
 5. UI/UX 디자인(5.5 서버 go서버로 전환)
 6. 배포
+
+---
+## Socket.IO with Express
+Socket.IO 설치
+```bash
+npm install socket.io
+```
+Express 설치
+```bash
+npm install express
+```
+vite+Express 설치(vite에서 express 사용하기위해)
+```bash
+npm i vite-express
+```
+server.js   
+우리는 package.json "type": "module" 임으로 ES modules 방식으로   
+![alt text](pulbic/image1.png)
+
+<strong>각 docs를 확인할 것</strong>
