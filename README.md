@@ -28,4 +28,4 @@ server.js
 우리는 package.json "type": "module" 임으로 ES modules 방식으로   
 ![alt text](pulbic/image1.png)
 
-<strong>각 docs를 확인할 것</strong>
+<strong>각 docs를 확인할 것</strong> 
