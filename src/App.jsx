@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3000");
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [message, setMessage] = useState("");
+  const [chat, setChat] = useState([]);
+
+  useEffect(() => {
+    socket.on("receive_message", (msg) => {
+      setChat((prev) => [...prev, msg]);
+    });
+
+    return () => {
+      socket.off("receive_message");
+    };
+  }, []);
+
+  const sendMessage = () => {
+    if (message.trim()) {
+      socket.emit("send_message", message);
+      setMessage("");
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ padding: "20px" }}>
+      <h1>💬 실시간 채팅</h1>
+      <div style={{ border: "1px solid gray", padding: "10px", height: "200px", overflowY: "auto" }}>
+        {chat.map((msg, index) => (
+          <p key={index}>{msg}</p>
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="메시지를 입력하세요..." />
+      <button onClick={sendMessage}>전송</button>
+    </div>
+  );
 }
 
-export default App
+export default App;

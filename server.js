@@ -1,36 +1,37 @@
-import express from "express";  //ES modules with Express (모듈형식으로 가져온 것)
-import ViteExpress from "vite-express";
-import { createServer } from "http";
+import express from "express";
+import * as http from "http";
 import { Server } from "socket.io";
-import { createServer as createViteServer } from "vite";
-
+import cors from "cors";
 
 const app = express();
-const httpServer = createServer(app);
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:5173", // React 서버 주소
+    methods: ["GET", "POST"],
+  },
+});
 
-const io = new Server(httpServer); 
+const PORT = 3000;
+
+app.use(cors()); // CORS 설정 추가
 
 io.on("connection", (socket) => {
-  // ...
-});
+  console.log(`🔌 Client connected: ${socket.id}`);
 
-httpServer.listen(3000, () => {
-    console.log('listening on 3000port')
-});
-
-// Express API 경로
-app.get("/message", (_, res) => res.send("Hello from express!"));
-
-// Vite 개발 서버 설정 (별도 실행)
-async function startVite() {
-  const vite = await createViteServer({
-    server: {
-      middlewareMode: true,
-    },
+  socket.on("send_message", (message) => {
+    console.log(`📩 Message received: ${message}`);
+    io.emit("receive_message", message); // 모든 클라이언트에게 전송
   });
-  
-  // Vite의 미들웨어를 Express에 연결
-  app.use(vite.middlewares);
-}
 
-startVite();
+  socket.on("disconnect", () => {
+    console.log(`❌ Client disconnected: ${socket.id}`);
+  });
+});
+
+httpServer.listen(PORT, () => {
+  console.log(`✅ Server running at http://localhost:${PORT}`);
+});
+
+// ✅ 라우트를 먼저 정의
+app.get("/message", (_, res) => res.send("Hello from express!"));
