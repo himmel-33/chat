@@ -20,9 +20,14 @@ Express 설치
 ```bash
 npm install express
 ```
-vite+Express 설치(vite에서 express 사용하기위해)
+vite+Express 설치(프런트와 벡 동시 실행)
 ```bash
 npm i vite-express
+```
+
+cors 설치(두개의 포트를 나눠서 실행)
+```bash
+npm i cors
 ```
 server.js   
 우리는 package.json "type": "module" 임으로 ES modules 방식으로   
