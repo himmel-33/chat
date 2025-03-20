@@ -16,16 +16,16 @@ const PORT = 3000;
 
 app.use(cors()); // CORS 설정 추가
 
-io.on("connection", (socket) => {
-  console.log(`🔌 Client connected: ${socket.id}`);
+io.on("connection", (client) => {
+  console.log(`🔌 사용자 접속함: ${client.id}`);
 
-  socket.on("send_message", (message) => {
+  client.on("send_message", (message) => {
     console.log(`📩 Message received: ${message}`);
     io.emit("receive_message", message); // 모든 클라이언트에게 전송
   });
 
-  socket.on("disconnect", () => {
-    console.log(`❌ Client disconnected: ${socket.id}`);
+  client.on("disconnect", () => {
+    console.log(`❌ 사용자가 접속종료함: ${client.id}`);
   });
 });
 
@@ -35,3 +35,4 @@ httpServer.listen(PORT, () => {
 
 // ✅ 라우트를 먼저 정의
 app.get("/message", (_, res) => res.send("Hello from express!"));
+app.get("/api", (_, res) => res.send("Hello from api!"));
