@@ -32,7 +32,3 @@ io.on("connection", (client) => {
 httpServer.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
 });
-
-// ✅ 라우트를 먼저 정의
-app.get("/message", (_, res) => res.send("Hello from express!"));
-app.get("/api", (_, res) => res.send("Hello from api!"));
