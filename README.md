@@ -35,8 +35,11 @@ server.js
 
 <strong>각 docs를 확인할 것</strong>  
 
-### 서버 클라이언트 지금까지 구현 현황
+## 서버 클라이언트 지금까지 구현 현황
 ![alt text](public/image2.png)
 
-### 유저이름 지금까지 구현 현황
+## 유저이름 지금까지 구현 현황
 ![alt text](public/image3.png)
+
+## tailwind 스타일 구현
+[tailwind using-vite 공식 사이트 참고](https://tailwindcss.com/docs/installation/using-vite)
