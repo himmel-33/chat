@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import "./styles.css";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -52,20 +53,20 @@ function App() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>💬 실시간 채팅</h1>
-      <div className="card">
-        <h3>유저명: {username}</h3>
-        <h3>현재 접속상태: {isConnected ? '접속중' : '미접속'}</h3>
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="사용자명 입력" />
-        <button onClick={connectToChatServer}>접속하기</button>
-        <button onClick={disconnectToChatServer}>접속 종료</button>
+      <h1 className="text-4xl font-bold underline">💬 실시간 채팅</h1>
+      <div className="card p-4 border rounded shadow-md">
+        <h3 className="text-xl">유저명: {username}</h3>
+        <h3 className="text-xl">현재 접속상태: {isConnected ? '접속중' : '미접속'}</h3>
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="사용자명 입력" className="border p-2 rounded mt-2"/>
+        <button onClick={connectToChatServer} className="bg-blue-500 text-black p-2 rounded mt-2">접속하기</button>
+        <button onClick={disconnectToChatServer} className="bg-blue-500 text-black p-2 rounded mt-2">접속 종료</button>
       </div>
-      <div style={{ border: "1px solid gray", padding: "10px", height: "200px", overflowY: "auto" }}>
+      <div className="border p-4 mt-4 h-64 overflow-y-auto">
         {chat.map((a, i) => (
           <p key={i}>{a.username} : {a.message}</p>
         ))}
       </div>
-      <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="메시지 입력" />
+      <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="메시지 입력" className="border p-2 rounded mt-2"/>
       <button onClick={sendMessage}>전송</button>
     </div>
   );
