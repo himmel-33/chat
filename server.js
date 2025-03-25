@@ -30,7 +30,7 @@ io.on("connection", (client) => {
 
   client.on("disconnect", () => {
     console.log(`${connectedClientUsername}가 접속종료함`);
-    io.emit("receive_message", { username: "관리자", message: `${connectedClientUsername}님이 접속했습니다.` });
+    io.emit("receive_message", { username: "관리자", message: `${connectedClientUsername}님이 접속을 종료했습니다.` });
   });
 });
 
