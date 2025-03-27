@@ -45,4 +45,4 @@ server.js
 [tailwind using-vite 공식 사이트 참고](https://tailwindcss.com/docs/installation/using-vite)
 기존의 방식과 달라져서 애좀 먹었다.  
 공식 문서를 찾아보니 tailwindcss/vite 라이브러리를 추가해서 다운하더라.(간편해짐)  
-Tailwind CSS IntelliSense 라는 확장툴도 있어 사용 간편해짐  
+Tailwind CSS IntelliSense 라는 확장툴도 있어 사용 간편해짐    
