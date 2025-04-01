@@ -45,9 +45,22 @@ server.js
 [tailwind using-vite 공식 사이트 참고](https://tailwindcss.com/docs/installation/using-vite)
 기존의 방식과 달라져서 애좀 먹었다.  
 공식 문서를 찾아보니 tailwindcss/vite 라이브러리를 추가해서 다운하더라.(간편해짐)  
-Tailwind CSS IntelliSense 라는 확장툴도 있어 사용 간편해짐 
+Tailwind CSS IntelliSense 라는 확장툴도 있어 사용 간편해짐   
 
 ### 최종스타일
-![alt text](public/image4.png)
+![alt text](public/image4.png)  
 
 ## 서버 GOlang으로
+server폴더 만들고 [go설치](https://go.dev/dl/)  
+```bash
+cd server
+go mod init go-chat-server
+go get -u github.com/gin-gonic/gin
+go get -u github.com/gorilla/websocket
+```
+go 모듈 초기화 및 라이브러리 설치 후 go서버 react랑 연결   
+
+### 주요변경점
+![alt text](public/image5.png)
+### 요약
+![alt text](public/image6.png)
