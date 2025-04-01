@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { useState } from "react";
 import './App.css'
 
 function App() {
@@ -7,47 +6,47 @@ function App() {
   const [chat, setChat] = useState([]);
   const [username, setUsername] = useState("");
   const [socket, setSocket] = useState(null);
-  const [isConnected, setIsConnected] = useState(false); //connectToChatServer 누를때마다 소켓연결 방지
+  const [isConnected, setIsConnected] = useState(false); // 연결 상태 관리
 
-  useEffect(() => {
-    if (username && !socket) return; // username이 설정되지 않으면 소켓 생성 X
+  // WebSocket 연결을 useEffect에서 처리하지 않고 버튼 클릭 시 처리
+  const connectToChatServer = () => {
+    if (username && !socket) {
+      const ws = new WebSocket(`ws://localhost:3000/ws?username=${username}`);
+      
+      ws.onopen = () => {
+        setSocket(ws);
+        setIsConnected(true); // 연결 성공 시 상태 변경
+        console.log("WebSocket 연결 성공");
+      };
 
-    const _socket = io("http://localhost:3000", {
-      autoConnect: false,
-      query: { username }, //ES6 단축 속성 (키와 값이 같을 때 축약)
-    });
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        setChat((prev) => [...prev, data]); // 서버로부터 메시지 받기
+      };
 
-    _socket.on("receive_message", (data) => {
-      setChat((prev) => [...prev, data]);
-    });
+      ws.onerror = (error) => {
+        console.log("WebSocket 오류:", error);
+      };
 
-    setSocket(_socket);
+      ws.onclose = () => {
+        console.log("WebSocket 연결 종료");
+        setIsConnected(false); // 연결 종료 시 상태 변경
+      };
+    }
+  };
 
-    return () => {
-      _socket.disconnect(); // 컴포넌트가 언마운트될 때 소켓 연결 해제
-    };
-  }, [username]); // username이 변경될 때마다 새로운 소켓을 생성
+  const disconnectToChatServer = () => {
+    if (socket && isConnected) {
+      socket.close(); // WebSocket 연결 종료
+      setIsConnected(false);
+    }
+  };
 
   const sendMessage = () => {
     if (message.trim() && socket) {
-      socket.emit("send_message", message); //에밋 서버에 데이터 전송 (JSON 형식으로도 가능)
-      setMessage("");
-    }
-  };
-
-  const connectToChatServer = () => {
-    if (socket && !isConnected) {
-      console.log("connectToChatServer 실행");
-      socket.connect();
-      setIsConnected(true);
-    }
-  };
-  
-  const disconnectToChatServer = () => {
-    if (socket && isConnected) {
-      console.log("disconnectToChatServer 실행");
-      socket.disconnect();
-      setIsConnected(false);
+      const msg = { username, message };
+      socket.send(JSON.stringify(msg)); // WebSocket으로 메시지 전송
+      setMessage(""); // 메시지 입력란 비우기
     }
   };
 
