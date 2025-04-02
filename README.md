@@ -62,5 +62,10 @@ go 모듈 초기화 및 라이브러리 설치 후 go서버 react랑 연결
 
 ### 주요변경점
 ![alt text](public/image5.png)
+
 ### 요약
 ![alt text](public/image6.png)
+
+### 마무리
+![alt text](public/image7.png)
+![alt text](public/image8.png)
