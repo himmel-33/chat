@@ -71,3 +71,4 @@ go 모듈 초기화 및 라이브러리 설치 후 go서버 react랑 연결
 ![alt text](public/image8.png)
 
 ## 배포  
+ render.com으로 배포할 생각이다.  
