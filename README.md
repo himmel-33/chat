@@ -58,7 +58,18 @@ go mod init go-chat-server
 go get -u github.com/gin-gonic/gin
 go get -u github.com/gorilla/websocket
 ```
-go 모듈 초기화 및 라이브러리 설치 후 go서버 react랑 연결   
+go 모듈 초기화 및 라이브러리 설치 후 go서버 react랑 연결  
+
+벡엔드 서버 실행 명령
+```bash
+cd go-chat-server
+go run server.go
+```
+프런트엔드 실행 명령  
+```bash
+cd ..
+npm run dev
+```
 
 ### 주요변경점
 ![alt text](public/image5.png)
@@ -72,3 +83,7 @@ go 모듈 초기화 및 라이브러리 설치 후 go서버 react랑 연결
 
 ## 배포  
  render.com으로 배포할 생각이다.  
+ 
+ 1. gitgub 연결
+ 2. 배포할 repo 선택
+ 3. 프런트, 벡 나눠서 배포
