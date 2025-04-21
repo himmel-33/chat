@@ -58,7 +58,7 @@ function App() {
           <div className="text-4xl text-white mb-4">
             Live 채팅방 
           </div>
-          <img src ="public/check.png" alt="checkimg" />
+          <img src ="check.png" alt="checkimg" />
         </div>
         <div className="mt-4 p-4 border border-white rounded">
           <div className="text-xl text-amber-50">
