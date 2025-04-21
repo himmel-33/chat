@@ -11,7 +11,7 @@ function App() {
   // WebSocket 연결을 useEffect에서 처리하지 않고 버튼 클릭 시 처리
   const connectToChatServer = () => {
     if (username && !socket) {
-      const ws = new WebSocket(`"wss://chat-backend-go.onrender.com/ws?username=${username}`);
+      const ws = new WebSocket(`wss://chat-backend-go.onrender.com/ws?username=${username}`);
       
       ws.onopen = () => {
         setSocket(ws);
