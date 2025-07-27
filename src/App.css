@@ -1,1 +1,25 @@
-@import "tailwindcss";
+
+.d-btn {
+  background-color: #5865f2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5em 1em;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.d-btn:disabled {
+  background-color: #99aab5;
+  cursor: not-allowed;
+}
+.d-input {
+  background-color: #40444b;
+  color: #fff;
+  border: 1px solid #23272a;
+  border-radius: 6px;
+  padding: 0.5em;
+}
+.d-users-list {
+  list-style: none;
+  padding: 0;
+}
