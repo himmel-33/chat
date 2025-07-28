@@ -11,7 +11,7 @@ function App() {
 
   const connectToChatServer = () => {
     if (username && !socket) {
-      const ws = new WebSocket(`wss://chat-backend-go.onrender.com/ws?username=${username}`);
+      const ws = new WebSocket(`ws://localhost:3000/ws?username=${username}`);
       ws.onopen = () => {
         setSocket(ws);
         setIsConnected(true);
@@ -68,7 +68,8 @@ function App() {
   return (
     <div className="min-h-screen flex bg-[#23272a]">
       {/* 왼쪽 사이드바 */}
-      <div className="w-1/4 bg-[#2c2f33] p-6 flex flex-col border-r border-[#23272a]">
+      <div className="w-1/3 bg-[#2c2f33] p-6 flex flex-col border-r border-[#23272a]">
+        <img src='logo2.png' alt="로고" className="mb-6"/>
         <div className="mb-6">
           <div className="text-lg text-[#5865f2] font-bold mb-2">유저 정보</div>
           <input
@@ -96,7 +97,7 @@ function App() {
         </div>
       </div>
       {/* 오른쪽 채팅창 */}
-      <div className="w-3/4 flex flex-col p-6">
+      <div className="w-2/3 flex flex-col p-6">
         <div className="flex-1 bg-[#36393f] rounded-lg p-4 overflow-y-auto mb-4">
           {chat.map((a, i) => (
             <div key={i} className="mb-2">
