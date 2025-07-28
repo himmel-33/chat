@@ -18,9 +18,10 @@ var upgrader = websocket.Upgrader{
 var clients = make(map[*websocket.Conn]string) // *websocket.Conn : ws 연결 객체의 포인터
 var broadcast = make(chan Message)             // channel 사용
 
-type Message struct { // 위 Message구조체 정의
+type Message struct {
 	Username string `json:"username"`
 	Message  string `json:"message"`
+	Type     string `json:"type,omitempty"`
 }
 
 // WebSocket 연결 처리 함수
@@ -40,41 +41,53 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 	clients[conn] = username
 
-	// 새로운 유저접속을 알리는 브로드캐스트, 서버에도 로그 출력
-	broadcast <- Message{Username: "시스템", Message: fmt.Sprintf("%s님이 입장했습니다.", username)}
-	log.Printf("%s님이 접속했습니다.\n", username) 
+	sendUserList() // 모든 클라이언트에 접속자 목록 전송
+	log.Printf("%s님이 접속했습니다.\n", username)
 
 	// 메세지 수신 for 무한 루프(웹소켓 연결이 열려 있는 동안 계속 반복)
 	for {
 		var msg Message
 		err := conn.ReadJSON(&msg) //클라이언트가 JSON 메시지를 보낼 때까지 기다리는 블로킹 함수(메시지오면 json을 디코딩하여 msg에 넣음)
 		if err != nil { //오류 및 퇴장 처리
-			log.Println("메시지 읽기 오류:", err)
 			delete(clients, conn)
-			broadcast <- Message{Username: "시스템", Message: fmt.Sprintf("%s님이 퇴장했습니다.", username)}
+			sendUserList() // 퇴장 시에도 접속자 목록 전송
 			log.Printf("%s님이 퇴장했습니다.\n", username) 
 			break
 		}
 
 		// 디코딩된 msg -> 브로드캐스트
-		broadcast <- msg
+		broadcast <- Message{Username: msg.Username, Message: msg.Message, Type: "chat"}
 		log.Printf("%s: %s\n", msg.Username, msg.Message)
 	}
 }
 
+func sendUserList() {
+    userList := []string{}
+    for _, name := range clients {
+        userList = append(userList, name)
+    }
+    for client := range clients {
+        client.WriteJSON(map[string]interface{}{
+            "type":  "users",
+            "users": userList,
+        })
+    }
+}
+
 // 메시지 브로드캐스트 핸들러
 func handleMessages() {
-	for {
-		msg := <-broadcast
-		for client := range clients { 
-			err := client.WriteJSON(msg)
-			if err != nil { //오류처리
-				log.Println("메시지 전송 오류:", err)
-				client.Close()
-				delete(clients, client)
-			}
-		}
-	}
+    for {
+        msg := <-broadcast
+        for client := range clients { 
+            err := client.WriteJSON(msg)
+            if err != nil { //오류처리
+                log.Println("메시지 전송 오류:", err)
+                client.Close()
+                delete(clients, client)
+                sendUserList() // 연결 끊길 때 접속자 목록 갱신
+            }
+        }
+    }
 }
 
 func main() {

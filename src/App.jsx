@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './App.css'; // 반복되는 부분만 사용
 
 function App() {
@@ -15,18 +15,27 @@ function App() {
       ws.onopen = () => {
         setSocket(ws);
         setIsConnected(true);
+        console.log("WebSocket 연결 성공");
       };
       ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === "users") {
-          setUsers(data.users);
-        } else {
-          setChat((prev) => [...prev, data]);
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === "users") {
+            setUsers(data.users);
+          } else {
+            setChat((prev) => [...prev, data]);
+          }
+        } catch (err) {
+          console.error("메시지 파싱 오류:", err, event.data);
         }
       };
-      ws.onclose = () => {
+      ws.onerror = (err) => {
+        console.error("WebSocket 에러:", err);
+      };
+      ws.onclose = (e) => {
         setIsConnected(false);
         setSocket(null);
+        console.log("WebSocket 연결 종료", e);
       };
     }
   };
@@ -46,6 +55,15 @@ function App() {
       setMessage("");
     }
   };
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
+  useEffect(() => {
+    console.log("접속자 목록:", users);
+  }, [users]);
 
   return (
     <div className="min-h-screen flex bg-[#23272a]">
@@ -95,6 +113,7 @@ function App() {
             placeholder="메시지 입력"
             className="d-input flex-1 mr-2"
             disabled={!isConnected}
+            onKeyDown={handleKeyPress}
           />
           <button onClick={sendMessage} className="d-btn" disabled={!isConnected}>
             전송
