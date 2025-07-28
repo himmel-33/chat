@@ -11,7 +11,7 @@ function App() {
 
   const connectToChatServer = () => {
     if (username && !socket) {
-      const ws = new WebSocket(`ws://localhost:3000/ws?username=${username}`);
+      const ws = new WebSocket(`wss://chat-backend-go.onrender.com/ws?username=${username}`);
       ws.onopen = () => {
         setSocket(ws);
         setIsConnected(true);
